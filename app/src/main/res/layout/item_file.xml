@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+
+    android:background="@color/netease_gray"
+
+    android:layout_height="match_parent">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:background="@color/netease_white"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_height="match_parent">
+    <com.etsy.android.grid.util.DynamicHeightImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/icon"
+        android:src="@drawable/ic_launcher_background"
+        android:layout_alignParentTop="true"
+        android:scaleType="centerCrop"
+        android:adjustViewBounds="true"
+
+        />
+
+
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:singleLine="true"
+            android:id="@+id/time"
+            android:text="时间"
+            android:textColor="@color/netease_black"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@+id/icon"
+            />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:singleLine="true"
+        android:id="@+id/name"
+        android:textColor="@color/netease_black"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/time"
+        android:text="名称"
+        />
+    </RelativeLayout>
+</RelativeLayout>

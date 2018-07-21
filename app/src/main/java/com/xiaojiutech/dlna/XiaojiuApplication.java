@@ -16,7 +16,7 @@ public class XiaojiuApplication extends  Application{
     public void onCreate() {
         super.onCreate();
 
-        CrashHandler.getInstance().init(getApplicationContext());
+//        CrashHandler.getInstance().init(getApplicationContext());
         sInstance = this;
     }
 

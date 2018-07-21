@@ -6,4 +6,5 @@
     <color name="netease_red">#de4137</color>
     <color name="netease_white">#ffffff</color>
     <color name="netease_gray">#fadad8</color>
+    <color name="netease_black">#000000</color>
 </resources>

@@ -7,29 +7,33 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.etsy.android.grid.StaggeredGridView;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdView;
 import com.xiaojiutech.dlna.R;
 import com.xiaojiutech.dlna.bean.MaterialBean;
+import com.xiaojiutech.dlna.utils.FileListViewAdapter;
+import com.xiaojiutech.dlna.utils.FileOpenIntentUtil;
 import com.xiaojiutech.dlna.utils.PullListView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class VideoFragment extends BaseFragment implements View.OnClickListener{
 
     private List<MaterialBean> mVideoList;
-//    private HistoryFileDao mFileDao;
-    private PullListView mListView;
-//    private FileListViewAdapter mAdapter;
+    private StaggeredGridView mListView;
+    private FileListViewAdapter mAdapter;
     public AdView mTopBannerAd,mFooterBannerAd;
     private View mHeaderView,mFooterView;
     private TextView mTitle;
     private Button mClearDb;
-
+    private List<MaterialBean> mDatas = new ArrayList<MaterialBean>();
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -39,7 +43,7 @@ public class VideoFragment extends BaseFragment implements View.OnClickListener{
         mTitle.setText(getString(R.string.video));
         mClearDb = (Button)view.findViewById(R.id.btn_clear_db);
         mClearDb.setOnClickListener(this);
-        mListView = (PullListView)view.findViewById(R.id.pullListView);
+        mListView = (StaggeredGridView)view.findViewById(R.id.pullListView);
         mHeaderView = inflater.inflate(R.layout.send_fragment_listview_headerview,null,false);
         mFooterView = inflater.inflate(R.layout.send_fragment_listview_headerview,null,false);
         mTopBannerAd = mHeaderView.findViewById(R.id.top_banner_ad);
@@ -50,6 +54,9 @@ public class VideoFragment extends BaseFragment implements View.OnClickListener{
             @Override
             public void onLoadCompleted(List<MaterialBean> datas) {
                 Log.i(TAG,"LOAD Completed. size = "+datas.size());
+                mDatas = datas;
+                mAdapter.setDatas(mDatas);
+                mAdapter.notifyDataSetChanged();
             }
         };
         return view;
@@ -85,36 +92,25 @@ public class VideoFragment extends BaseFragment implements View.OnClickListener{
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-//        mFileDao = DBUtil.getInstance(getActivity()).getDaoSession().getHistoryFileDao();
-//        mRecvList = getFileList(1);
-//        mAdapter = new FileListViewAdapter(getActivity(),mRecvList);
-//        mListView.setAdapter(mAdapter);
-//        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-//                HistoryFile file = mRecvList.get(i);
-//                if (file!=null){
-//                    FileOpenIntentUtil.openFile(file.getPath());
-//                }
-//            }
-//        });
-//        mAdapter.notifyDataSetChanged();
+        mAdapter = new FileListViewAdapter(getActivity(),mDatas);
+        mListView.setAdapter(mAdapter);
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+            }
+        });
+        mAdapter.notifyDataSetChanged();
         showBannerAd();
         loadMaterials(0);
     }
 
     @Override
     public void onResume() {
-//        mFileDao = DBUtil.getInstance(getActivity()).getDaoSession().getHistoryFileDao();
-//        mRecvList = getFileList(1);
-//        mAdapter.setDatas(mRecvList);
-//        mAdapter.notifyDataSetChanged();
         super.onResume();
     }
 
-//    private List<HistoryFile> getFileList(int type){
-//        return mFileDao.queryBuilder().where(HistoryFileDao.Properties.Type.eq(type)).orderDesc(HistoryFileDao.Properties.Time).list();
-//    }
+
 
     @Override
     public void onClick(View view) {

@@ -8,6 +8,7 @@
     android:gravity="center"
     android:orientation="vertical"
     android:id="@+id/sendFrag"
+    android:background="@color/netease_gray"
     >
     <RelativeLayout
         android:layout_width="match_parent"
@@ -40,7 +41,7 @@
            android:layout_marginRight="8dp"
            />
     </RelativeLayout>
-    <com.xiaojiutech.dlna.utils.PullListView
+    <com.etsy.android.grid.StaggeredGridView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fastScrollEnabled="true"
@@ -49,8 +50,10 @@
         android:divider="#ff000000"
         android:layout_below="@+id/titlelayout"
         android:id="@+id/pullListView"
+        app:item_margin="8dp"
+        app:column_count="2"
         >
-    </com.xiaojiutech.dlna.utils.PullListView>
+    </com.etsy.android.grid.StaggeredGridView>
 
 
 </RelativeLayout>
