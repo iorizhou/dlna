@@ -18,12 +18,13 @@ public class PictureLoadUtil {
      *
      * @return list
      */
-    public static List<MaterialBean> loadAllPictures(Context context, int uid) {
+    public static List<MaterialBean> loadAllPictures(Context context) {
         List<MaterialBean> list = new ArrayList<>();
         String[] projection = {
                 MediaStore.Images.Media.DATA,
                 MediaStore.Images.Media.DISPLAY_NAME,
-                MediaStore.Images.Media.SIZE
+                MediaStore.Images.Media.SIZE,
+                MediaStore.Video.Media._ID
         };
         //全部图片
         String where = MediaStore.Images.Media.MIME_TYPE + "=? or "
@@ -38,12 +39,25 @@ public class PictureLoadUtil {
         if (cursor == null) {
             return list;
         }
+        String[] thumbColumns = {MediaStore.Images.Thumbnails.DATA,
+                MediaStore.Images.Thumbnails.IMAGE_ID};
         int fileIndex = 0;
         //遍历
         while (cursor.moveToNext()) {
             MaterialBean materialBean = new MaterialBean();
+            int id = cursor.getInt(cursor.getColumnIndex(MediaStore.Images.Media._ID));
             //获取图片的名称
             materialBean.setTitle(cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DISPLAY_NAME)));
+            Cursor thumbCursor = context.getContentResolver().query(
+                    MediaStore.Images.Thumbnails.EXTERNAL_CONTENT_URI,
+                    thumbColumns, MediaStore.Images.Thumbnails.IMAGE_ID
+                            + "=" + id, null, null);
+            if (thumbCursor.moveToFirst()){
+                materialBean.setLogo(thumbCursor.getString(thumbCursor
+                        .getColumnIndex(MediaStore.Images.Thumbnails.DATA)));
+                thumbCursor.close();
+            }
+
             long size = cursor.getLong(cursor.getColumnIndexOrThrow(MediaStore.Images.Media.SIZE)); // 大小
             //获取图片的生成日期
             byte[] data = cursor.getBlob(cursor.getColumnIndex(MediaStore.Images.Media.DATA));
@@ -53,7 +67,6 @@ public class PictureLoadUtil {
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm");
             String t = format.format(time);
             materialBean.setTime(t);
-            materialBean.setLogo(path);
             materialBean.setFilePath(path);
             materialBean.setFileSize(size);
             materialBean.setChecked(false);

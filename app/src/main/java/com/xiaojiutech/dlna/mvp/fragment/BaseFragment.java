@@ -19,6 +19,7 @@ import com.google.android.gms.ads.reward.RewardedVideoAdListener;
 import com.xiaojiutech.dlna.XiaojiuApplication;
 import com.xiaojiutech.dlna.bean.MaterialBean;
 import com.xiaojiutech.dlna.utils.AdmobConstants;
+import com.xiaojiutech.dlna.utils.PictureLoadUtil;
 import com.xiaojiutech.dlna.utils.VideoLoadUtil;
 
 import java.util.ArrayList;
@@ -55,10 +56,14 @@ public class BaseFragment extends Fragment {
                 List<MaterialBean> list = new ArrayList<MaterialBean>();
                 if (type==0){
                     list = VideoLoadUtil.getAllLocalVideos(XiaojiuApplication.getInstace());
-                    Message msg = mHandler.obtainMessage(0);
-                    msg.obj = list;
-                    mHandler.sendMessage(msg);
+
+                }else if(type == 1){
+                    list = PictureLoadUtil.loadAllPictures(XiaojiuApplication.getInstace());
                 }
+
+                Message msg = mHandler.obtainMessage(0);
+                msg.obj = list;
+                mHandler.sendMessage(msg);
             }
         }).start();
     }
