@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "465428588967",
+    "firebase_url": "https://xiaojiutech-dlna.firebaseio.com",
+    "project_id": "xiaojiutech-dlna",
+    "storage_bucket": "xiaojiutech-dlna.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:465428588967:android:c45d441c54356ba1",
+        "android_client_info": {
+          "package_name": "com.xiaojiutech.dlna"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "465428588967-ob5jhkjel3tdp5galedlvrvfkv9e69pn.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDImfOYJO9Umcwta4Y3YkfEHnCWxZV65y8"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

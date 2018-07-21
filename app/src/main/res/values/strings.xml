@@ -1,3 +1,13 @@
 <resources>
-    <string name="app_name">dlna</string>
+    <string name="app_name">手机投屏神器</string>
+    <string name="file_permission_tip">为了APP的正常使用，APP需要获取文件读取权限</string>
+    <string name="video">视频</string>
+    <string name="picture">照片</string>
+    <string name="audio">音频</string>
+    <string name="upgrade_file_error">抱歉,升级文件被损毁.升级失败,请稍候再试.</string>
+    <string name="new_version_tip">APP版本升级</string>
+    <string name="confirm">确定</string>
+    <string name="cancel">取消</string>
+    <string name="double_click_exit_app">再按一次back键 退出程序</string>
+    <string name="clear_record">清空记录</string>
 </resources>
