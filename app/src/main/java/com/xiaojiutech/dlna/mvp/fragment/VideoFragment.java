@@ -9,15 +9,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdView;
 import com.xiaojiutech.dlna.R;
+import com.xiaojiutech.dlna.bean.MaterialBean;
 import com.xiaojiutech.dlna.utils.PullListView;
+
+import java.util.List;
 
 public class VideoFragment extends BaseFragment implements View.OnClickListener{
 
-//    private List<HistoryFile> mRecvList;
+    private List<MaterialBean> mVideoList;
 //    private HistoryFileDao mFileDao;
     private PullListView mListView;
 //    private FileListViewAdapter mAdapter;
@@ -25,6 +29,7 @@ public class VideoFragment extends BaseFragment implements View.OnClickListener{
     private View mHeaderView,mFooterView;
     private TextView mTitle;
     private Button mClearDb;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -41,8 +46,16 @@ public class VideoFragment extends BaseFragment implements View.OnClickListener{
         mFooterBannerAd = mFooterView.findViewById(R.id.top_banner_ad);
         mListView.addHeaderView(mHeaderView);
         mListView.addFooterView(mFooterView);
+        mLoadListener = new LoadListener() {
+            @Override
+            public void onLoadCompleted(List<MaterialBean> datas) {
+                Log.i(TAG,"LOAD Completed. size = "+datas.size());
+            }
+        };
         return view;
     }
+
+
 
     public void showBannerAd(){
         loadBannerAd(new AdListener(){
@@ -87,7 +100,7 @@ public class VideoFragment extends BaseFragment implements View.OnClickListener{
 //        });
 //        mAdapter.notifyDataSetChanged();
         showBannerAd();
-
+        loadMaterials(0);
     }
 
     @Override
