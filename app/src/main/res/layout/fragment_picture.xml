@@ -30,7 +30,7 @@
        <Button
            android:layout_width="wrap_content"
            android:layout_height="wrap_content"
-           android:id="@+id/btn_clear_db"
+           android:id="@+id/search_device_btn"
            android:text="@string/clear_record"
            android:textSize="14sp"
            android:background="@drawable/buttonstyle"
@@ -39,7 +39,18 @@
            android:layout_alignParentRight="true"
 
            android:layout_marginRight="8dp"
+           android:visibility="gone"
            />
+        <org.angmarch.views.NiceSpinner
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/device_spinner"
+
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+
+            android:layout_marginRight="8dp"
+            />
     </RelativeLayout>
     <com.etsy.android.grid.StaggeredGridView
         android:layout_width="match_parent"
