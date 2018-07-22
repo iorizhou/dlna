@@ -12,4 +12,5 @@
     <string name="clear_record">清空记录</string>
 
     <string name="webserver_start_failed">服务启动失败,无法投屏。请稍候重试</string>
+    <string name="dlna_nodevice_tip">未发现任何可投屏DLNA设备，请确保投屏设备和手机已经连接至同一个WIFI网络。然后重试.</string>
 </resources>

@@ -28,7 +28,12 @@
             </intent-filter>
         </activity>
         <service android:name=".webserver.WebServerService"/>
+        <service android:name=".server.service.DLNAService"/>
         <activity android:name=".mvp.activity.MainActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"/>
+        <activity android:name=".mvp.activity.DLNAMainActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"/>
+        <activity android:name=".mvp.activity.ControlActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"/>
     </application>
 
