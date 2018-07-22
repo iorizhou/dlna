@@ -2,6 +2,7 @@ package com.xiaojiutech.dlna.webserver;
 
 import android.util.Log;
 
+import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 
@@ -27,7 +28,8 @@ public class AndroidWebServer extends NanoHTTPD {
             Log.i("webserver",session.getUri());
             File file = new File(session.getUri());
             FileInputStream fis = new FileInputStream(file);
-            Response response = newFixedLengthResponse(Response.Status.OK,getMimeTypeForFile(file.getName()),fis,file.length());
+            Log.i("iorizhou","mime = "+getMimeTypeForFile(file.getName()));
+            Response response = newChunkedResponse(Response.Status.OK,getMimeTypeForFile(file.getName()),new BufferedInputStream(fis));
             response.addHeader("Access-Control-Allow-Origin","*");
             response.addHeader("Access-Control-Expose-Headers","Content-Length");
             response.addHeader("Proxy-Connection","Proxy-Connection");

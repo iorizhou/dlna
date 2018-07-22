@@ -17,9 +17,11 @@ import android.widget.Toast;
 
 
 import com.xiaojiutech.dlna.R;
+import com.xiaojiutech.dlna.bean.MaterialBean;
 import com.xiaojiutech.dlna.server.engine.DLNAContainer;
 import com.xiaojiutech.dlna.server.engine.MultiPointController;
 import com.xiaojiutech.dlna.server.inter.IController;
+import com.xiaojiutech.dlna.utils.Constants;
 
 import org.cybergarage.upnp.Device;
 
@@ -61,7 +63,7 @@ public class ControlActivity extends BaseActivity implements OnClickListener {
 	private boolean mStartAutoPlayed;
 
 	private static final String TAG = "ControlActivity";
-
+	private MaterialBean mMediaBean;
 	@SuppressLint("HandlerLeak")
 	private Handler mHandler = new Handler() {
 		public void handleMessage(Message msg) {
@@ -86,6 +88,7 @@ public class ControlActivity extends BaseActivity implements OnClickListener {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_control);
+		mMediaBean = (MaterialBean)getIntent().getParcelableExtra("materialbean");
 		findView();
 		initView();
 	}
@@ -124,8 +127,9 @@ public class ControlActivity extends BaseActivity implements OnClickListener {
 	private void initView() {
 		setController(new MultiPointController());
 		mDevice = DLNAContainer.getInstance().getSelectedDevice();
-
-		urls.add("http://192.168.1.4:8655/mnt/sdcard/111.rmvb");// 我们结婚吧
+		//http://ips.ifeng.com/video19.ifeng.com/video09/2018/07/11/36740253-102-009-170229.mp4
+		urls.add("http://ips.ifeng.com/video19.ifeng.com/video09/2018/07/11/36740253-102-009-170229.mp4");
+//		urls.add("http://192.168.1.4:8655/mnt/sdcard/111.rmvb");// 我们结婚吧
 //		urls.add("http://video19.ifeng.com/video06/2012/09/28/97b03b63-1133-43d0-a6ff-fb2bc6326ac7.mp4");// 伊能静
 //		urls.add("http://video19.ifeng.com/video06/2012/04/11/629da9ec-60d4-4814-a940-997e6487804a.mp4"); // 佟丽娅
 
@@ -283,7 +287,7 @@ public class ControlActivity extends BaseActivity implements OnClickListener {
 		showPlay(true);
 		setCurrentTime(ZEROTIME);
 		setTotalTime(ZEROTIME);
-		setTitle(path);
+		setTitle();
 		stopAutoIncreasing();
 		stopAutoPlaying();
 
@@ -594,21 +598,9 @@ public class ControlActivity extends BaseActivity implements OnClickListener {
 		tv_total.setText(time);
 	}
 
-	private void setTitle(String title) {
-		switch (index % urls.size()) {
-		case 0:
-			title = "我们结婚吧";
-			break;
-		case 1:
-			title = "伊能静专访";
-			break;
-		case 2:
-			title = "佟丽娅专访";
-			break;
-		default:
-			break;
-		}
-		tv_title.setText(title);
+	private void setTitle() {
+
+		tv_title.setText(mMediaBean.getTitle());
 	}
 
 	private void startAutoIncreasing() {

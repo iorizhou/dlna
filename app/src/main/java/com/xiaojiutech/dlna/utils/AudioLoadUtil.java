@@ -3,6 +3,7 @@ package com.xiaojiutech.dlna.utils;
 import android.content.Context;
 import android.database.Cursor;
 import android.provider.MediaStore;
+import android.util.Log;
 
 import com.xiaojiutech.dlna.bean.MaterialBean;
 
@@ -61,6 +62,7 @@ public class AudioLoadUtil {
             String t = format.format(time);
             materialBean.setTime(t);
             materialBean.setFilePath(path);
+            Log.i("iorizhou","filepath = "+path);
             materialBean.setFileSize(size);
             materialBean.setChecked(false);
             materialBean.setFileType(2);

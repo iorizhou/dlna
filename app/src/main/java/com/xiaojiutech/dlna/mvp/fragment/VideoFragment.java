@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +19,7 @@ import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdView;
 import com.xiaojiutech.dlna.R;
 import com.xiaojiutech.dlna.bean.MaterialBean;
+import com.xiaojiutech.dlna.mvp.activity.ControlActivity;
 import com.xiaojiutech.dlna.server.engine.DLNAContainer;
 import com.xiaojiutech.dlna.server.service.DLNAService;
 import com.xiaojiutech.dlna.utils.Constants;
@@ -149,7 +151,11 @@ public class VideoFragment extends BaseFragment implements View.OnClickListener{
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 MaterialBean bean = mDatas.get(i);
                 String url = Constants.WEB_SERVER_IP+bean.getFilePath();
-                Log.i(TAG,"URL = "+url);
+                if (bean!=null&& !TextUtils.isEmpty(url) && DLNAContainer.getInstance().getSelectedDevice() != null){
+                    Intent intent = new Intent(getActivity(),ControlActivity.class);
+                    intent.putExtra("materialbean",bean);
+                    getActivity().startActivity(intent);
+                }
             }
         });
         mAdapter.notifyDataSetChanged();
@@ -178,6 +184,7 @@ public class VideoFragment extends BaseFragment implements View.OnClickListener{
         updateDeviceList(mDevices);
         if (mDeviceNames.size()>0){
             mDeviceSpinner.attachDataSource(mDeviceNames);
+            DLNAContainer.getInstance().setSelectedDevice(mDevices.get(0));
         }
     }
 
