@@ -202,6 +202,7 @@ public class MainActivity extends BaseFragmentActivity implements EasyPermission
         checkUpdate();
         mServerIp = getIpAccess();
         Constants.WEB_SERVER_IP = mServerIp + "8655";
+        Toast.makeText(this,Constants.WEB_SERVER_IP,Toast.LENGTH_SHORT).show();
         bindWebServerService();
     }
 

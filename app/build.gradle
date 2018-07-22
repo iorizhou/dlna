@@ -48,6 +48,7 @@ dependencies {
     // add library
     compile 'com.etsy.android.grid:library:1.0.5'
     implementation files('libs/universal-image-loader-1.9.5.jar')
+    implementation project(':library')
 }
 apply plugin: 'com.google.gms.google-services'
 configurations.all {
