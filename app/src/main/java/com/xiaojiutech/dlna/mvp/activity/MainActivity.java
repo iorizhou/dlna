@@ -1,9 +1,14 @@
 package com.xiaojiutech.dlna.mvp.activity;
 
 import android.Manifest;
+import android.content.ComponentName;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.ServiceConnection;
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.IBinder;
 import android.os.Message;
 import android.os.Process;
 import android.support.annotation.NonNull;
@@ -30,6 +35,8 @@ import com.xiaojiutech.dlna.utils.DownloadTask;
 import com.xiaojiutech.dlna.utils.FileOpenIntentUtil;
 import com.xiaojiutech.dlna.utils.Md5Util;
 import com.xiaojiutech.dlna.utils.ProgressDialog;
+import com.xiaojiutech.dlna.webserver.AndroidWebServer;
+import com.xiaojiutech.dlna.webserver.WebServerService;
 
 
 import java.io.BufferedReader;
@@ -54,6 +61,9 @@ public class MainActivity extends BaseFragmentActivity implements EasyPermission
     private TextView mText1,mText2,mText3;
     private ImageView mImg1,mImg2,mImg3;
     private String mUpgradeFileMd5;
+    private ServiceConnection mServiceConnection;
+    private WebServerService mWebServerService;
+    private String mServerIp;
     private Handler mHandler = new Handler(){
         @Override
         public void handleMessage(Message msg) {
@@ -138,6 +148,13 @@ public class MainActivity extends BaseFragmentActivity implements EasyPermission
             }
         }
     };
+
+    private String getIpAccess() {
+        WifiManager wifiManager = (WifiManager) getApplicationContext().getSystemService(WIFI_SERVICE);
+        int ipAddress = wifiManager.getConnectionInfo().getIpAddress();
+        final String formatedIpAddress = String.format("%d.%d.%d.%d", (ipAddress & 0xff), (ipAddress >> 8 & 0xff), (ipAddress >> 16 & 0xff), (ipAddress >> 24 & 0xff));
+        return "http://" + formatedIpAddress + ":";
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -182,9 +199,34 @@ public class MainActivity extends BaseFragmentActivity implements EasyPermission
         updateDocker();
         requireSomePermission();
         checkUpdate();
+        mServerIp = getIpAccess();
+        bindWebServerService();
     }
 
+    private void bindWebServerService(){
+        mServiceConnection = new ServiceConnection() {
+            @Override
+            public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
+                WebServerService.MyBinder binder = (WebServerService.MyBinder)iBinder;
+                mWebServerService = ((WebServerService.MyBinder) iBinder).getService();
+                Log.i(TAG,"IP = "+mServerIp);
+                final Boolean bindResult = mWebServerService.startAndroidWebServer(mServerIp,8655);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(MainActivity.this,bindResult?"webserver启动成功":getString(R.string.webserver_start_failed),Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
 
+            @Override
+            public void onServiceDisconnected(ComponentName componentName) {
+
+            }
+        };
+        Intent intent = new Intent(MainActivity.this,WebServerService.class);
+        bindService(intent,mServiceConnection,BIND_AUTO_CREATE);
+    }
 
     /**
      * 添加或者显示 fragment
@@ -335,5 +377,13 @@ public class MainActivity extends BaseFragmentActivity implements EasyPermission
         }
         return super.onKeyUp(keyCode, event);
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+//        unbindService();
+    }
+
+
 }
 

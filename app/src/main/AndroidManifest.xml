@@ -27,6 +27,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <service android:name=".webserver.WebServerService"/>
         <activity android:name=".mvp.activity.MainActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"/>
     </application>

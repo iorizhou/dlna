@@ -19,6 +19,7 @@ import com.google.android.gms.ads.reward.RewardedVideoAdListener;
 import com.xiaojiutech.dlna.XiaojiuApplication;
 import com.xiaojiutech.dlna.bean.MaterialBean;
 import com.xiaojiutech.dlna.utils.AdmobConstants;
+import com.xiaojiutech.dlna.utils.AudioLoadUtil;
 import com.xiaojiutech.dlna.utils.PictureLoadUtil;
 import com.xiaojiutech.dlna.utils.VideoLoadUtil;
 
@@ -59,8 +60,9 @@ public class BaseFragment extends Fragment {
 
                 }else if(type == 1){
                     list = PictureLoadUtil.loadAllPictures(XiaojiuApplication.getInstace());
+                }else if (type == 2){
+                    list = AudioLoadUtil.loadAllAudio(XiaojiuApplication.getInstace());
                 }
-
                 Message msg = mHandler.obtainMessage(0);
                 msg.obj = list;
                 mHandler.sendMessage(msg);

@@ -66,7 +66,7 @@ public class VideoLoadUtil {
                 }
                     materialBean.setFilePath(path);
                     materialBean.setChecked(false);
-                    materialBean.setFileType(2);
+                    materialBean.setFileType(0);
                     materialBean.setFileId(fileIndex++);
                     materialBean.setUploadedSize(0);
                     materialBean.setTimeStamps(System.currentTimeMillis() + "");

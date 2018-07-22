@@ -70,7 +70,7 @@ public class PictureLoadUtil {
             materialBean.setFilePath(path);
             materialBean.setFileSize(size);
             materialBean.setChecked(false);
-            materialBean.setFileType(6);
+            materialBean.setFileType(1);
             materialBean.setFileId(fileIndex++);
             materialBean.setUploadedSize(0);
             materialBean.setTimeStamps(System.currentTimeMillis() + "");

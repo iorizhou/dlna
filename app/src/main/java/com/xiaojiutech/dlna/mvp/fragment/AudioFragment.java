@@ -1,6 +1,5 @@
 package com.xiaojiutech.dlna.mvp.fragment;
 
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -11,114 +10,117 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.etsy.android.grid.StaggeredGridView;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdView;
 import com.xiaojiutech.dlna.R;
-import com.xiaojiutech.dlna.utils.PullListView;
+import com.xiaojiutech.dlna.bean.MaterialBean;
+import com.xiaojiutech.dlna.utils.FileListViewAdapter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class AudioFragment extends BaseFragment implements View.OnClickListener{
 
-//    private List<HistoryFile> mSendList;
-//    private HistoryFileDao mFileDao;
-    private PullListView mListView;
-//    private FileListViewAdapter mAdapter;
+    private List<MaterialBean> mVideoList;
+    private StaggeredGridView mListView;
+    private FileListViewAdapter mAdapter;
     public AdView mTopBannerAd,mFooterBannerAd;
     private View mHeaderView,mFooterView;
     private TextView mTitle;
     private Button mClearDb;
+    private List<MaterialBean> mDatas = new ArrayList<MaterialBean>();
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater,container,savedInstanceState);
-        View view = inflater.inflate(R.layout.fragment_audio,container,false);
+        View view = inflater.inflate(R.layout.fragment_picture,container,false);
         mTitle = (TextView)view.findViewById(R.id.title);
         mTitle.setText(getString(R.string.audio));
         mClearDb = (Button)view.findViewById(R.id.btn_clear_db);
         mClearDb.setOnClickListener(this);
-        mListView = (PullListView)view.findViewById(R.id.pullListView);
+        mListView = (StaggeredGridView)view.findViewById(R.id.pullListView);
         mHeaderView = inflater.inflate(R.layout.send_fragment_listview_headerview,null,false);
         mFooterView = inflater.inflate(R.layout.send_fragment_listview_headerview,null,false);
         mTopBannerAd = mHeaderView.findViewById(R.id.top_banner_ad);
         mFooterBannerAd = mFooterView.findViewById(R.id.top_banner_ad);
         mListView.addHeaderView(mHeaderView);
         mListView.addFooterView(mFooterView);
+        mLoadListener = new LoadListener() {
+            @Override
+            public void onLoadCompleted(List<MaterialBean> datas) {
+                Log.i(TAG,"LOAD Completed. size = "+datas.size());
+                mDatas = datas;
+                mAdapter.setDatas(mDatas);
+                mAdapter.notifyDataSetChanged();
+            }
+        };
         return view;
     }
+
 
 
     public void showBannerAd(){
         loadBannerAd(new AdListener(){
             @Override
             public void onAdLoaded() {
-                Log.i("admob","send_top_banner_ad loaded");
+                Log.i("admob","recv_top_banner_ad loaded");
             }
 
             @Override
             public void onAdFailedToLoad(int i) {
-                Log.i("admob","send_top_banner_ad onAdFailedToLoad = "+i);
+                Log.i("admob","recv_top_banner_ad onAdFailedToLoad = "+i);
             }
         },mTopBannerAd);
         loadBannerAd(new AdListener(){
             @Override
             public void onAdLoaded() {
-                Log.i("admob","send_top_banner_ad loaded");
+                Log.i("admob","recv_top_banner_ad loaded");
             }
 
             @Override
             public void onAdFailedToLoad(int i) {
-                Log.i("admob","send_top_banner_ad onAdFailedToLoad = "+i);
+                Log.i("admob","recv_top_banner_ad onAdFailedToLoad = "+i);
             }
         },mFooterBannerAd);
     }
+
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-//        mFileDao = DBUtil.getInstance(getActivity()).getDaoSession().getHistoryFileDao();
-//        mSendList = getFileList(0);
-//        mAdapter = new FileListViewAdapter(getActivity(),mSendList);
-//        mListView.setAdapter(mAdapter);
-//        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-//                HistoryFile file = mSendList.get(i);
-//                if (file!=null){
-//                    FileOpenIntentUtil.openFile(file.getPath());
-//                }
-//            }
-//        });
-//        mAdapter.notifyDataSetChanged();
+        mAdapter = new FileListViewAdapter(getActivity(),mDatas);
+        mListView.setAdapter(mAdapter);
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+            }
+        });
+        mAdapter.notifyDataSetChanged();
         showBannerAd();
+        loadMaterials(2);
     }
 
     @Override
     public void onResume() {
-//        mFileDao = DBUtil.getInstance(getActivity()).getDaoSession().getHistoryFileDao();
-//        mSendList = getFileList(0);
-//        mAdapter.setDatas(mSendList);
-//        mAdapter.notifyDataSetChanged();
         super.onResume();
     }
 
-//    private List<HistoryFile> getFileList(int type){
-//        return mFileDao.queryBuilder().where(HistoryFileDao.Properties.Type.eq(type)).orderDesc(HistoryFileDao.Properties.Time).list();
-//    }
+
 
     @Override
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.btn_clear_db:
-//                new AlertDialogUtil(getActivity()).showAlertDialog(getString(R.string.app_name), "确定清空所有文件发送记录吗?", "确 定", new DialogInterface.OnClickListener() {
+//                new AlertDialogUtil(getActivity()).showAlertDialog(getString(R.string.app_name), "确定清空所有文件接收记录吗?", "确 定", new DialogInterface.OnClickListener() {
 //                    @Override
 //                    public void onClick(DialogInterface dialogInterface, int i) {
-//                        mFileDao.deleteInTx(mSendList);
-//                        mSendList.clear();
-//                        mAdapter.setDatas(mSendList);
+//                        mFileDao.deleteInTx(mRecvList);
+//                        mRecvList.clear();
+//                        mAdapter.setDatas(mRecvList);
 //                        mAdapter.notifyDataSetChanged();
-//                        Toast.makeText(getActivity(),"已清空所有文件发送记录",Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(getActivity(),"已清空所有文件接收记录",Toast.LENGTH_SHORT).show();
 //                    }
 //                },"取 消",null,true);
                 break;

@@ -10,4 +10,6 @@
     <string name="cancel">取消</string>
     <string name="double_click_exit_app">再按一次back键 退出程序</string>
     <string name="clear_record">清空记录</string>
+
+    <string name="webserver_start_failed">服务启动失败,无法投屏。请稍候重试</string>
 </resources>
