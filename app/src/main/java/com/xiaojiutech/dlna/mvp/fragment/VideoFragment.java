@@ -17,6 +17,7 @@ import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdView;
 import com.xiaojiutech.dlna.R;
 import com.xiaojiutech.dlna.bean.MaterialBean;
+import com.xiaojiutech.dlna.utils.Constants;
 import com.xiaojiutech.dlna.utils.FileListViewAdapter;
 import com.xiaojiutech.dlna.utils.FileOpenIntentUtil;
 import com.xiaojiutech.dlna.utils.PullListView;
@@ -59,6 +60,7 @@ public class VideoFragment extends BaseFragment implements View.OnClickListener{
                 mAdapter.notifyDataSetChanged();
             }
         };
+
         return view;
     }
 
@@ -97,7 +99,9 @@ public class VideoFragment extends BaseFragment implements View.OnClickListener{
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-
+                MaterialBean bean = mDatas.get(i);
+                String url = Constants.WEB_SERVER_IP+bean.getFilePath();
+                Log.i(TAG,"URL = "+url);
             }
         });
         mAdapter.notifyDataSetChanged();

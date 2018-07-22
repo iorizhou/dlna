@@ -31,6 +31,7 @@ import com.xiaojiutech.dlna.mvp.fragment.PictureFragment;
 import com.xiaojiutech.dlna.mvp.fragment.VideoFragment;
 import com.xiaojiutech.dlna.utils.AlertDialogUtil;
 import com.xiaojiutech.dlna.utils.AppUtil;
+import com.xiaojiutech.dlna.utils.Constants;
 import com.xiaojiutech.dlna.utils.DownloadTask;
 import com.xiaojiutech.dlna.utils.FileOpenIntentUtil;
 import com.xiaojiutech.dlna.utils.Md5Util;
@@ -200,6 +201,7 @@ public class MainActivity extends BaseFragmentActivity implements EasyPermission
         requireSomePermission();
         checkUpdate();
         mServerIp = getIpAccess();
+        Constants.WEB_SERVER_IP = mServerIp + "8655";
         bindWebServerService();
     }
 

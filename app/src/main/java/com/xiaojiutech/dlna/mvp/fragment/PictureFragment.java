@@ -41,7 +41,7 @@ public class PictureFragment extends BaseFragment implements View.OnClickListene
         super.onCreateView(inflater,container,savedInstanceState);
         View view = inflater.inflate(R.layout.fragment_picture,container,false);
         mTitle = (TextView)view.findViewById(R.id.title);
-        mTitle.setText(getString(R.string.video));
+        mTitle.setText(getString(R.string.picture));
         mClearDb = (Button)view.findViewById(R.id.btn_clear_db);
         mClearDb.setOnClickListener(this);
         mListView = (StaggeredGridView)view.findViewById(R.id.pullListView);
