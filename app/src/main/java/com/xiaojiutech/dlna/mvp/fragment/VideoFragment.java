@@ -149,13 +149,19 @@ public class VideoFragment extends BaseFragment implements View.OnClickListener{
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                MaterialBean bean = mDatas.get(i);
-                String url = Constants.WEB_SERVER_IP+bean.getFilePath();
-                if (bean!=null&& !TextUtils.isEmpty(url) && DLNAContainer.getInstance().getSelectedDevice() != null){
-                    Intent intent = new Intent(getActivity(),ControlActivity.class);
-                    intent.putExtra("materialbean",bean);
-                    getActivity().startActivity(intent);
-                }
+               try{
+                   MaterialBean bean = mDatas.get(i-1);
+                   String url = Constants.WEB_SERVER_IP+bean.getFilePath();
+                   if (bean!=null&& !TextUtils.isEmpty(url) && DLNAContainer.getInstance().getSelectedDevice() != null){
+                       Intent intent = new Intent(getActivity(),ControlActivity.class);
+                       intent.putExtra("materialbean",bean);
+                       intent.putExtra("type","video");
+                       getActivity().startActivity(intent);
+                   }
+               }catch (Exception e){
+                   e.printStackTrace();
+                   Log.e(TAG,"onItemClick ERROR : "+e.getMessage());
+               }
             }
         });
         mAdapter.notifyDataSetChanged();
@@ -191,14 +197,13 @@ public class VideoFragment extends BaseFragment implements View.OnClickListener{
     @Override
     public void onResume() {
         super.onResume();
+        refreshDevice();
     }
 
 
 
     @Override
     public void onClick(View view) {
-        switch (view.getId()){
 
-        }
     }
 }

@@ -146,11 +146,17 @@ public class AudioFragment extends BaseFragment implements View.OnClickListener{
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                MaterialBean bean = mDatas.get(i);
-                if (bean!=null&& DLNAContainer.getInstance().getSelectedDevice() != null){
-                    Intent intent = new Intent(getActivity(),ControlActivity.class);
-                    intent.putExtra("materialbean",bean);
-                    getActivity().startActivity(intent);
+                try{
+                    MaterialBean bean = mDatas.get(i-1);
+                    if (bean!=null&& DLNAContainer.getInstance().getSelectedDevice() != null){
+                        Intent intent = new Intent(getActivity(),ControlActivity.class);
+                        intent.putExtra("materialbean",bean);
+                        intent.putExtra("type","audio");
+                        getActivity().startActivity(intent);
+                    }
+                }catch (Exception e){
+                    e.printStackTrace();
+                    Log.e(TAG,"onItemClick ERROR : "+e.getMessage());
                 }
             }
         });
@@ -186,6 +192,7 @@ public class AudioFragment extends BaseFragment implements View.OnClickListener{
     @Override
     public void onResume() {
         super.onResume();
+        refreshDevice();
     }
 
 
