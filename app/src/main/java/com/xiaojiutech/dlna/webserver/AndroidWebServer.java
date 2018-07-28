@@ -56,12 +56,16 @@ public class AndroidWebServer extends NanoHTTPD {
                 range = "bytes=0-";
             }
             Response response = null;
-            String type = session.getParms().get("type");
-
-            if (TextUtils.isEmpty(type)||!type.equals("picture")){
-                response = getPartialResponse("image/png",range,session.getUri());
+            String uri = session.getUri();
+            boolean isPic = uri.endsWith(".png")||uri.endsWith(".jpg")||uri.endsWith(".jpeg")||uri.endsWith(".gif")||uri.endsWith(".bmp")||uri.endsWith(".tiff")||uri.endsWith(".exif")||uri.endsWith(".webp");
+            if (!isPic){
+                response = getPartialResponse("video/mp4",range,session.getUri());
             }else {
-                response = new Response(Response.Status.OK,"image/png",new FileInputStream(new File(session.getUri())));
+                File img = new File(session.getUri());
+                response = new Response(Response.Status.OK,"image/png",new FileInputStream(img));
+            response.addHeader("Content-Length", img.length() + "");
+            response.addHeader("Content-Range", "bytes " + 0 + "-" + img.length() + "/" + img.length());
+            response.addHeader("Content-Type", "image/png");
             }
             return response;
         }catch (Exception e){

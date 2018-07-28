@@ -128,7 +128,8 @@ public class ControlActivity extends BaseActivity implements OnClickListener {
 		setController(new MultiPointController());
 		mDevice = DLNAContainer.getInstance().getSelectedDevice();
 		//http://ips.ifeng.com/video19.ifeng.com/video09/2018/07/11/36740253-102-009-170229.mp4
-		urls.add(Constants.WEB_SERVER_IP+mMediaBean.getFilePath()+"?type="+getIntent().getStringExtra("type"));
+		urls.add(Constants.WEB_SERVER_IP+mMediaBean.getFilePath());
+//		urls.add("http://idc.xiaojiutech.com/wifitransfer/logo.jpg");
 		Log.i("ioriz","url = "+urls.get(0));
 		if (mController == null || mDevice == null) {
 			// usually can't reach here.
