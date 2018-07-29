@@ -8,6 +8,7 @@ import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.net.URLDecoder;
 
 import fi.iki.elonen.NanoHTTPD;
 
@@ -23,7 +24,7 @@ public class AndroidWebServer extends NanoHTTPD {
     public AndroidWebServer(String hostname, int port) {
         super(hostname, port);
     }
-    private Response getPartialResponse(String mimeType, String rangeHeader,String filepath) throws IOException {
+    private Response getPartialResponse(String mimeType, String rangeHeader, String filepath) throws IOException {
         File file = new File(filepath);
         String rangeValue = rangeHeader.trim().substring("bytes=".length());
         long fileLength = file.length();
@@ -56,16 +57,18 @@ public class AndroidWebServer extends NanoHTTPD {
                 range = "bytes=0-";
             }
             Response response = null;
-            String uri = session.getUri();
-            boolean isPic = uri.endsWith(".png")||uri.endsWith(".jpg")||uri.endsWith(".jpeg")||uri.endsWith(".gif")||uri.endsWith(".bmp")||uri.endsWith(".tiff")||uri.endsWith(".exif")||uri.endsWith(".webp");
-            if (!isPic){
-                response = getPartialResponse("video/mp4",range,session.getUri());
-            }else {
+            String uri = URLDecoder.decode(session.getUri(),"utf-8");
+            boolean isPic = uri.toLowerCase().endsWith(".png")||uri.toLowerCase().endsWith(".jpg")||uri.toLowerCase().endsWith(".jpeg")||uri.toLowerCase().endsWith(".gif")||uri.toLowerCase().endsWith(".bmp")||uri.toLowerCase().endsWith(".tiff")||uri.toLowerCase().endsWith(".exif")||uri.toLowerCase().endsWith(".webp");
+            if (uri.toLowerCase().endsWith(".mp3")||uri.toLowerCase().endsWith(".wav")||uri.toLowerCase().endsWith(".wma")||uri.toLowerCase().endsWith(".flac")||uri.toLowerCase().endsWith(".ogg")||uri.toLowerCase().endsWith(".ape")||uri.toLowerCase().endsWith(".aac")){
+                response = getPartialResponse("audio/mpeg3",range,session.getUri());
+            }else if (isPic) {
                 File img = new File(session.getUri());
                 response = new Response(Response.Status.OK,"image/png",new FileInputStream(img));
             response.addHeader("Content-Length", img.length() + "");
             response.addHeader("Content-Range", "bytes " + 0 + "-" + img.length() + "/" + img.length());
             response.addHeader("Content-Type", "image/png");
+            }else {
+                response = getPartialResponse("video/mp4",range,session.getUri());
             }
             return response;
         }catch (Exception e){

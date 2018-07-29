@@ -25,6 +25,7 @@ import com.xiaojiutech.dlna.utils.Constants;
 
 import org.cybergarage.upnp.Device;
 
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -128,7 +129,15 @@ public class ControlActivity extends BaseActivity implements OnClickListener {
 		setController(new MultiPointController());
 		mDevice = DLNAContainer.getInstance().getSelectedDevice();
 		//http://ips.ifeng.com/video19.ifeng.com/video09/2018/07/11/36740253-102-009-170229.mp4
-		urls.add(Constants.WEB_SERVER_IP+mMediaBean.getFilePath());
+		try{
+			String name = mMediaBean.getFilePath().substring(mMediaBean.getFilePath().lastIndexOf("/")+1);
+			String dir = mMediaBean.getFilePath().substring(0,mMediaBean.getFilePath().lastIndexOf("/")+1);
+			Log.i("zhoup","NAME = "+name + " \n dir ="+dir);
+			urls.add(Constants.WEB_SERVER_IP+dir+URLEncoder.encode(name,"utf-8"));
+			Log.i("zhoup",urls.get(0));
+		}catch (Exception e){
+			urls.add(Constants.WEB_SERVER_IP+mMediaBean.getFilePath());
+		}
 //		urls.add("http://idc.xiaojiutech.com/wifitransfer/logo.jpg");
 		Log.i("ioriz","url = "+urls.get(0));
 		if (mController == null || mDevice == null) {
