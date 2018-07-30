@@ -12,7 +12,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.etsy.android.grid.util.DynamicHeightImageView;
+import com.nostra13.universalimageloader.core.ImageLoader;
 import com.xiaojiutech.dlna.R;
+import com.xiaojiutech.dlna.XiaojiuApplication;
 import com.xiaojiutech.dlna.bean.MaterialBean;
 
 
@@ -22,10 +24,12 @@ public class FileListViewAdapter extends BaseAdapter {
     private List<MaterialBean> mDatas;
     private Context mContext;
     private LayoutInflater mInflater;
+    private ImageLoader mImageLoader;
     public FileListViewAdapter(Context ctx, List<MaterialBean> datas){
         this.mContext = ctx;
         mInflater = LayoutInflater.from(this.mContext);
         this.mDatas = datas;
+        mImageLoader = ImageLoader.getInstance();
     }
 
     public void setDatas(List<MaterialBean> data){
@@ -64,11 +68,23 @@ public class FileListViewAdapter extends BaseAdapter {
         viewHolder.time.setText(bean.getTime());
         viewHolder.name.setText(bean.getTitle());
         Log.i("view","bean.getLogo() = "+bean.getLogo());
-        if (TextUtils.isEmpty(bean.getLogo())){
-            viewHolder.icon.setImageResource(R.drawable.no_thumbnail);
+        if (bean.getFileType()==0){
+            if (TextUtils.isEmpty(bean.getLogo())){
+                mImageLoader.displayImage("drawable://"+R.drawable.no_thumbnail,viewHolder.icon,XiaojiuApplication.getInstace().getmImageLoaderOptions());
+            }else {
+                mImageLoader.displayImage("file://"+bean.getLogo(),viewHolder.icon,XiaojiuApplication.getInstace().getmImageLoaderOptions());
+            }
+        }else if (bean.getFileType() == 2){
+            mImageLoader.displayImage("drawable://"+R.drawable.no_thumbnail,viewHolder.icon,XiaojiuApplication.getInstace().getmImageLoaderOptions());
         }else {
-            viewHolder.icon.setImageBitmap(BitmapFactory.decodeFile(bean.getLogo()));
+            mImageLoader.displayImage("file://"+bean.getFilePath(),viewHolder.icon,XiaojiuApplication.getInstace().getmImageLoaderOptions());
         }
+
+//        if (TextUtils.isEmpty(bean.getLogo())){
+//            mImageLoader.displayImage("drawable://"+R.drawable.no_thumbnail,viewHolder.icon,XiaojiuApplication.getInstace().getmImageLoaderOptions());
+//        }else {
+//            mImageLoader.displayImage("file://"+bean.getLogo(),viewHolder.icon,XiaojiuApplication.getInstace().getmImageLoaderOptions());
+//        }
         return view;
     }
 
