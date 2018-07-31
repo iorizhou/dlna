@@ -46,6 +46,8 @@ public class AudioFragment extends BaseFragment implements View.OnClickListener{
     private List<Device> mDevices = new ArrayList<Device>();
     private List<MaterialBean> mDatas = new ArrayList<MaterialBean>();
     private Button mSearchDeviceBtn;
+
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -141,21 +143,22 @@ public class AudioFragment extends BaseFragment implements View.OnClickListener{
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        mAdapter = new FileListViewAdapter(getActivity(),mDatas);
+        mAdapter = new FileListViewAdapter(getActivity(),mDatas,this);
         mListView.setAdapter(mAdapter);
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 try{
                     MaterialBean bean = mDatas.get(i-1);
-                    if (bean!=null&& DLNAContainer.getInstance().getSelectedDevice() != null){
-                        Intent intent = new Intent(getActivity(),ControlActivity.class);
-                        intent.putExtra("materialbean",bean);
-                        intent.putExtra("type","audio");
-                        getActivity().startActivity(intent);
+                    String url = Constants.WEB_SERVER_IP+bean.getFilePath();
+                    if (bean!=null&& !TextUtils.isEmpty(url) && DLNAContainer.getInstance().getSelectedDevice() != null){
+                        play(bean);
+                    }else {
+                        Toast.makeText(getActivity(),getString(R.string.dlna_nodeivce),Toast.LENGTH_SHORT).show();
                     }
                 }catch (Exception e){
                     e.printStackTrace();
+                    Toast.makeText(getActivity(),getString(R.string.play_error_tip),Toast.LENGTH_SHORT).show();
                     Log.e(TAG,"onItemClick ERROR : "+e.getMessage());
                 }
             }

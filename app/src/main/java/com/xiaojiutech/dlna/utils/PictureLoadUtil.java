@@ -3,6 +3,7 @@ package com.xiaojiutech.dlna.utils;
 import android.content.Context;
 import android.database.Cursor;
 import android.provider.MediaStore;
+import android.util.Log;
 
 import com.xiaojiutech.dlna.bean.MaterialBean;
 
@@ -39,8 +40,7 @@ public class PictureLoadUtil {
         if (cursor == null) {
             return list;
         }
-        String[] thumbColumns = {MediaStore.Images.Thumbnails.DATA,
-                MediaStore.Images.Thumbnails.IMAGE_ID};
+        String[] thumbColumns = {MediaStore.Images.Thumbnails.DATA};
         int fileIndex = 0;
         //遍历
         while (cursor.moveToNext()) {
@@ -48,16 +48,18 @@ public class PictureLoadUtil {
             int id = cursor.getInt(cursor.getColumnIndex(MediaStore.Images.Media._ID));
             //获取图片的名称
             materialBean.setTitle(cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DISPLAY_NAME)));
+            String[] idReplace = new String[]{id+""};
             Cursor thumbCursor = context.getContentResolver().query(
                     MediaStore.Images.Thumbnails.EXTERNAL_CONTENT_URI,
                     thumbColumns, MediaStore.Images.Thumbnails.IMAGE_ID
-                            + "=" + id, null, null);
+                            + "=?", idReplace, null);
+            Log.i("picture load","cursor count = "+thumbCursor.getCount());
             if (thumbCursor.moveToFirst()){
                 materialBean.setLogo(thumbCursor.getString(thumbCursor
                         .getColumnIndex(MediaStore.Images.Thumbnails.DATA)));
                 thumbCursor.close();
             }
-
+//            MediaStore.Images.Thumbnails.getThumbnail(context.getContentResolver(),id, MediaStore.Images.Thumbnails.MINI_KIND,null);
             long size = cursor.getLong(cursor.getColumnIndexOrThrow(MediaStore.Images.Media.SIZE)); // 大小
             //获取图片的生成日期
             byte[] data = cursor.getBlob(cursor.getColumnIndex(MediaStore.Images.Media.DATA));

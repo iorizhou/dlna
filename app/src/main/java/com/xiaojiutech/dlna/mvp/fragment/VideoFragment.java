@@ -144,7 +144,7 @@ public class VideoFragment extends BaseFragment implements View.OnClickListener{
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        mAdapter = new FileListViewAdapter(getActivity(),mDatas);
+        mAdapter = new FileListViewAdapter(getActivity(),mDatas,this);
         mListView.setAdapter(mAdapter);
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -153,13 +153,13 @@ public class VideoFragment extends BaseFragment implements View.OnClickListener{
                    MaterialBean bean = mDatas.get(i-1);
                    String url = Constants.WEB_SERVER_IP+bean.getFilePath();
                    if (bean!=null&& !TextUtils.isEmpty(url) && DLNAContainer.getInstance().getSelectedDevice() != null){
-                       Intent intent = new Intent(getActivity(),ControlActivity.class);
-                       intent.putExtra("materialbean",bean);
-                       intent.putExtra("type","video");
-                       getActivity().startActivity(intent);
+                       play(bean);
+                   }else {
+                       Toast.makeText(getActivity(),getString(R.string.dlna_nodeivce),Toast.LENGTH_SHORT).show();
                    }
                }catch (Exception e){
                    e.printStackTrace();
+                   Toast.makeText(getActivity(),getString(R.string.play_error_tip),Toast.LENGTH_SHORT).show();
                    Log.e(TAG,"onItemClick ERROR : "+e.getMessage());
                }
             }

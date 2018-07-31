@@ -20,30 +20,53 @@
         android:layout_alignParentTop="true"
         android:scaleType="centerCrop"
         android:adjustViewBounds="true"
-
         />
 
-
-
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/icon"
+        >
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@+id/play"
+            android:layout_marginRight="5dp"
+            >
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:singleLine="true"
             android:id="@+id/time"
             android:text="时间"
+            android:gravity="left|center_vertical"
             android:textColor="@color/netease_black"
             android:layout_centerHorizontal="true"
-            android:layout_below="@+id/icon"
+
             />
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:singleLine="true"
         android:id="@+id/name"
+        android:gravity="left|center_vertical"
         android:textColor="@color/netease_black"
         android:layout_centerHorizontal="true"
         android:layout_below="@+id/time"
         android:text="名称"
         />
+        </RelativeLayout>
+
+        <ImageView
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:id="@+id/play"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="5dp"
+            android:background="@drawable/play"
+            />
+    </RelativeLayout>
     </RelativeLayout>
 </RelativeLayout>
