@@ -165,7 +165,7 @@ public class AudioFragment extends BaseFragment implements View.OnClickListener{
         });
         mAdapter.notifyDataSetChanged();
         showBannerAd();
-        loadMaterials(2);
+        loadMaterials(2,mDatas.size(),1);
         startDLNAService();
         DLNAContainer.getInstance().setDeviceChangeListener(
                 new DLNAContainer.DeviceChangeListener() {

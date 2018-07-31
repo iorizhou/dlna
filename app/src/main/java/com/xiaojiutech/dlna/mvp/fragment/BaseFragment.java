@@ -120,7 +120,8 @@ public class BaseFragment extends Fragment {
         }
     }
 
-    public void loadMaterials(final int type){
+    public void loadMaterials(final int type,final int index,final int count){
+        Log.i(TAG,"loadMaterials "+index + " , "+count);
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -129,7 +130,7 @@ public class BaseFragment extends Fragment {
                     list = VideoLoadUtil.getAllLocalVideos(XiaojiuApplication.getInstace());
 
                 }else if(type == 1){
-                    list = PictureLoadUtil.loadAllPictures(XiaojiuApplication.getInstace());
+                    list = PictureLoadUtil.loadAllPictures(XiaojiuApplication.getInstace(),index,count);
                 }else if (type == 2){
                     list = AudioLoadUtil.loadAllAudio(XiaojiuApplication.getInstace());
                 }

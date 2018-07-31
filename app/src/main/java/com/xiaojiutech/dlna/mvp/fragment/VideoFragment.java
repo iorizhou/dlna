@@ -166,7 +166,7 @@ public class VideoFragment extends BaseFragment implements View.OnClickListener{
         });
         mAdapter.notifyDataSetChanged();
         showBannerAd();
-        loadMaterials(0);
+        loadMaterials(0,mDatas.size(),1);
         //start dlna service
         startDLNAService();
         DLNAContainer.getInstance().setDeviceChangeListener(

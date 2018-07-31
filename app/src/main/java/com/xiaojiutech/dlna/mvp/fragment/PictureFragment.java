@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.TextView;
@@ -35,7 +36,8 @@ import org.cybergarage.upnp.Device;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PictureFragment extends BaseFragment implements View.OnClickListener{
+public class PictureFragment extends BaseFragment implements View.OnClickListener,
+        AbsListView.OnScrollListener{
 
     private List<MaterialBean> mVideoList;
     private StaggeredGridView mListView;
@@ -49,6 +51,7 @@ public class PictureFragment extends BaseFragment implements View.OnClickListene
     private List<Device> mDevices = new ArrayList<Device>();
     private List<MaterialBean> mDatas = new ArrayList<MaterialBean>();
     private Button mSearchDeviceBtn;
+    private int mLastItem;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -87,11 +90,16 @@ public class PictureFragment extends BaseFragment implements View.OnClickListene
         mFooterBannerAd = mFooterView.findViewById(R.id.top_banner_ad);
         mListView.addHeaderView(mHeaderView);
         mListView.addFooterView(mFooterView);
+        mListView.setOnScrollListener(this);
         mLoadListener = new LoadListener() {
             @Override
             public void onLoadCompleted(List<MaterialBean> datas) {
                 Log.i(TAG,"LOAD Completed. size = "+datas.size());
-                mDatas = datas;
+                for (MaterialBean bean : datas){
+                    if (!mDatas.contains(bean)){
+                        mDatas.add(bean);
+                    }
+                }
                 mAdapter.setDatas(mDatas);
                 mAdapter.notifyDataSetChanged();
             }
@@ -145,6 +153,7 @@ public class PictureFragment extends BaseFragment implements View.OnClickListene
         super.onViewCreated(view, savedInstanceState);
         mAdapter = new FileListViewAdapter(getActivity(),mDatas,this);
         mListView.setAdapter(mAdapter);
+
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -166,7 +175,7 @@ public class PictureFragment extends BaseFragment implements View.OnClickListene
         });
         mAdapter.notifyDataSetChanged();
         showBannerAd();
-        loadMaterials(1);
+        loadMaterials(1,mDatas.size(),5);
         startDLNAService();
         DLNAContainer.getInstance().setDeviceChangeListener(
                 new DLNAContainer.DeviceChangeListener() {
@@ -202,5 +211,26 @@ public class PictureFragment extends BaseFragment implements View.OnClickListene
     @Override
     public void onClick(View view) {
 
+    }
+
+    @Override
+    public void onScrollStateChanged(AbsListView view, int scrollState) {
+        Log.i("IORIZHOU","onScrollStateChanged");
+        if (scrollState == AbsListView.OnScrollListener.SCROLL_STATE_IDLE) {
+            if (view.getLastVisiblePosition() == view.getCount() - 1) {
+                onLoadMoreItems();
+            }
+        }
+
+    }
+
+    @Override
+    public void onScroll(final AbsListView view, final int firstVisibleItem, final int visibleItemCount, final int totalItemCount) {
+        mLastItem = firstVisibleItem + visibleItemCount - 1 ;
+    }
+
+    private void onLoadMoreItems() {
+        Log.i(TAG,mDatas.size() + " ,10");
+        loadMaterials(1,mDatas.size(),5);
     }
 }

@@ -19,7 +19,8 @@ public class PictureLoadUtil {
      *
      * @return list
      */
-    public static List<MaterialBean> loadAllPictures(Context context) {
+    public static List<MaterialBean> loadAllPictures(Context context,int index,int count) {
+        String sort = MediaStore.Images.Media.DATE_MODIFIED + " desc limit  " + index + "," + count;
         List<MaterialBean> list = new ArrayList<>();
         String[] projection = {
                 MediaStore.Images.Media.DATA,
@@ -36,7 +37,7 @@ public class PictureLoadUtil {
         //查询
         Cursor cursor = context.getContentResolver().query(
                 MediaStore.Images.Media.EXTERNAL_CONTENT_URI, projection, where, whereArgs,
-                MediaStore.Images.Media.DATE_MODIFIED + " desc ");
+                sort);
         if (cursor == null) {
             return list;
         }
