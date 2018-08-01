@@ -98,7 +98,6 @@ public class XiaojiuApplication extends  Application{
     public void initPictureOptions() {
         mPictureOptions = new DisplayImageOptions.Builder()
                 // 设置图片在下载期间显示的图片
-                .showImageOnLoading(R.drawable.pic_logo)
                 // 设置图片Uri为空或是错误的时候显示的图片
                 .showImageForEmptyUri(R.drawable.pic_logo)
                 // 设置图片加载/解码过程中错误时候显示的图片
@@ -112,10 +111,10 @@ public class XiaojiuApplication extends  Application{
                 // 设置图片以如何的编码方式显示
                 .imageScaleType(ImageScaleType.EXACTLY_STRETCHED)
                 // 设置图片的解码类型//
-                .bitmapConfig(Bitmap.Config.ARGB_8888)
+                .bitmapConfig(Bitmap.Config.RGB_565)
                 // 设置图片的解码配置
                 // .decodingOptions(options)
-                // .delayBeforeLoading(int delayInMillis)//int
+//                 .delayBeforeLoading(1500)//int
                 // delayInMillis为你设置的下载前的延迟时间
                 // 设置图片加入缓存前，对bitmap进行设置
                 // .preProcessor(BitmapProcessor preProcessor)
@@ -124,7 +123,7 @@ public class XiaojiuApplication extends  Application{
                 // 是否设置为圆角，弧度为多少
                 .displayer(new RoundedBitmapDisplayer(20))
                 // 是否图片加载好后渐入的动画时间
-                .displayer(new FadeInBitmapDisplayer(800))
+                .displayer(new FadeInBitmapDisplayer(2000))
                 // 构建完成
                 .build();
     }
@@ -146,10 +145,10 @@ public class XiaojiuApplication extends  Application{
                 // 设置图片以如何的编码方式显示
                 .imageScaleType(ImageScaleType.EXACTLY_STRETCHED)
                 // 设置图片的解码类型//
-                .bitmapConfig(Bitmap.Config.ARGB_8888)
+                .bitmapConfig(Bitmap.Config.RGB_565)
                 // 设置图片的解码配置
-                // .decodingOptions(options)
-                // .delayBeforeLoading(int delayInMillis)//int
+//                 .decodingOptions(options)
+//                 .delayBeforeLoading(1500)//int
                 // delayInMillis为你设置的下载前的延迟时间
                 // 设置图片加入缓存前，对bitmap进行设置
                 // .preProcessor(BitmapProcessor preProcessor)

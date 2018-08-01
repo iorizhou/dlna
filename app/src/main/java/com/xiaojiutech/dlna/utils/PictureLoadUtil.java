@@ -20,7 +20,7 @@ public class PictureLoadUtil {
      * @return list
      */
     public static List<MaterialBean> loadAllPictures(Context context,int index,int count) {
-        String sort = MediaStore.Images.Media.DATE_MODIFIED + " desc limit  " + index + "," + count;
+        String sort = MediaStore.Images.Media.DATE_MODIFIED + " DESC limit  " + index + "," + count;
         List<MaterialBean> list = new ArrayList<>();
         String[] projection = {
                 MediaStore.Images.Media.DATA,

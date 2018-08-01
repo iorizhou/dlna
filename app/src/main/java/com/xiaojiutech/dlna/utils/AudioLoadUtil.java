@@ -19,7 +19,8 @@ public class AudioLoadUtil {
      *
      * @return list
      */
-    public static List<MaterialBean> loadAllAudio(Context context) {
+    public static List<MaterialBean> loadAllAudio(Context context,int index,int count) {
+        String sort = MediaStore.Audio.Media.DATE_MODIFIED + " desc "+ " limit  " + index + "," + count;
         List<MaterialBean> list = new ArrayList<>();
         String[] projection = {
                 MediaStore.Audio.Media.DATA,
@@ -40,7 +41,7 @@ public class AudioLoadUtil {
         //查询
         Cursor cursor = context.getContentResolver().query(
                 MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, projection, where, whereArgs,
-                MediaStore.Audio.Media.DATE_MODIFIED + " desc ");
+                sort);
         if (cursor == null) {
             return list;
         }

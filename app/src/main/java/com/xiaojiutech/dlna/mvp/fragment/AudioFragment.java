@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.TextView;
@@ -32,7 +33,7 @@ import org.cybergarage.upnp.Device;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AudioFragment extends BaseFragment implements View.OnClickListener{
+public class AudioFragment extends BaseFragment implements View.OnClickListener,AbsListView.OnScrollListener{
 
     private List<MaterialBean> mVideoList;
     private StaggeredGridView mListView;
@@ -46,7 +47,8 @@ public class AudioFragment extends BaseFragment implements View.OnClickListener{
     private List<Device> mDevices = new ArrayList<Device>();
     private List<MaterialBean> mDatas = new ArrayList<MaterialBean>();
     private Button mSearchDeviceBtn;
-
+    private int mLastItem;
+    private boolean mHasMoreItem = true;
 
     @Nullable
     @Override
@@ -85,11 +87,20 @@ public class AudioFragment extends BaseFragment implements View.OnClickListener{
         mFooterBannerAd = mFooterView.findViewById(R.id.top_banner_ad);
         mListView.addHeaderView(mHeaderView);
         mListView.addFooterView(mFooterView);
+        mListView.setOnScrollListener(this);
         mLoadListener = new LoadListener() {
             @Override
             public void onLoadCompleted(List<MaterialBean> datas) {
+                if (datas==null||datas.size()==0){
+                    mHasMoreItem = false;
+                    return;
+                }
                 Log.i(TAG,"LOAD Completed. size = "+datas.size());
-                mDatas = datas;
+                for (MaterialBean bean : datas){
+                    if (!mDatas.contains(bean)){
+                        mDatas.add(bean);
+                    }
+                }
                 mAdapter.setDatas(mDatas);
                 mAdapter.notifyDataSetChanged();
             }
@@ -97,10 +108,7 @@ public class AudioFragment extends BaseFragment implements View.OnClickListener{
         return view;
     }
 
-    private void startDLNAService() {
-        Intent intent = new Intent(getActivity(), DLNAService.class);
-        getActivity().startService(intent);
-    }
+
 
     private void stopDLNAService() {
         Intent intent = new Intent(getActivity(), DLNAService.class);
@@ -165,8 +173,7 @@ public class AudioFragment extends BaseFragment implements View.OnClickListener{
         });
         mAdapter.notifyDataSetChanged();
         showBannerAd();
-        loadMaterials(2,mDatas.size(),1);
-        startDLNAService();
+        loadMaterials(2,mDatas.size(),5);
         DLNAContainer.getInstance().setDeviceChangeListener(
                 new DLNAContainer.DeviceChangeListener() {
 
@@ -216,5 +223,30 @@ public class AudioFragment extends BaseFragment implements View.OnClickListener{
 //                },"取 消",null,true);
                 break;
         }
+    }
+
+    @Override
+    public void onScrollStateChanged(AbsListView view, int scrollState) {
+        Log.i("IORIZHOU","onScrollStateChanged");
+        if (scrollState == AbsListView.OnScrollListener.SCROLL_STATE_IDLE) {
+            if (view.getLastVisiblePosition() == view.getCount() - 1) {
+                onLoadMoreItems();
+            }
+        }
+
+    }
+
+    @Override
+    public void onScroll(final AbsListView view, final int firstVisibleItem, final int visibleItemCount, final int totalItemCount) {
+        mLastItem = firstVisibleItem + visibleItemCount - 1 ;
+    }
+
+    private void onLoadMoreItems() {
+        if (!mHasMoreItem){
+            Log.i(TAG,"dosen't has more item");
+            return;
+        }
+        Log.i(TAG,mDatas.size() + " ,10");
+        loadMaterials(2,mDatas.size(),5);
     }
 }

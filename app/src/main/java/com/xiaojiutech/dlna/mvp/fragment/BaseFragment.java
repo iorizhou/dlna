@@ -127,12 +127,12 @@ public class BaseFragment extends Fragment {
             public void run() {
                 List<MaterialBean> list = new ArrayList<MaterialBean>();
                 if (type==0){
-                    list = VideoLoadUtil.getAllLocalVideos(XiaojiuApplication.getInstace());
+                    list = VideoLoadUtil.getAllLocalVideos(XiaojiuApplication.getInstace(),index,count);
 
                 }else if(type == 1){
                     list = PictureLoadUtil.loadAllPictures(XiaojiuApplication.getInstace(),index,count);
                 }else if (type == 2){
-                    list = AudioLoadUtil.loadAllAudio(XiaojiuApplication.getInstace());
+                    list = AudioLoadUtil.loadAllAudio(XiaojiuApplication.getInstace(),index,count);
                 }
                 Message msg = mHandler.obtainMessage(0);
                 msg.obj = list;

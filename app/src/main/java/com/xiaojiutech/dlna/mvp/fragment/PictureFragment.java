@@ -52,6 +52,7 @@ public class PictureFragment extends BaseFragment implements View.OnClickListene
     private List<MaterialBean> mDatas = new ArrayList<MaterialBean>();
     private Button mSearchDeviceBtn;
     private int mLastItem;
+    private boolean mHasMoreItem = true;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -94,6 +95,10 @@ public class PictureFragment extends BaseFragment implements View.OnClickListene
         mLoadListener = new LoadListener() {
             @Override
             public void onLoadCompleted(List<MaterialBean> datas) {
+                if (datas==null||datas.size()==0){
+                    mHasMoreItem = false;
+                    return;
+                }
                 Log.i(TAG,"LOAD Completed. size = "+datas.size());
                 for (MaterialBean bean : datas){
                     if (!mDatas.contains(bean)){
@@ -114,10 +119,7 @@ public class PictureFragment extends BaseFragment implements View.OnClickListene
             mDeviceNames.add(device.getFriendlyName());
         }
     }
-    private void startDLNAService() {
-        Intent intent = new Intent(getActivity(), DLNAService.class);
-        getActivity().startService(intent);
-    }
+
 
     private void stopDLNAService() {
         Intent intent = new Intent(getActivity(), DLNAService.class);
@@ -176,7 +178,6 @@ public class PictureFragment extends BaseFragment implements View.OnClickListene
         mAdapter.notifyDataSetChanged();
         showBannerAd();
         loadMaterials(1,mDatas.size(),5);
-        startDLNAService();
         DLNAContainer.getInstance().setDeviceChangeListener(
                 new DLNAContainer.DeviceChangeListener() {
 
@@ -230,6 +231,10 @@ public class PictureFragment extends BaseFragment implements View.OnClickListene
     }
 
     private void onLoadMoreItems() {
+        if (!mHasMoreItem){
+            Log.i(TAG,"dosen't has more item");
+            return;
+        }
         Log.i(TAG,mDatas.size() + " ,10");
         loadMaterials(1,mDatas.size(),5);
     }

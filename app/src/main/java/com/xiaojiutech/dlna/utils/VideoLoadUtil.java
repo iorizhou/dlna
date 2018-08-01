@@ -18,7 +18,8 @@ public class VideoLoadUtil {
      *
      * @return list
      */
-    public static List<MaterialBean> getAllLocalVideos(Context context) {
+    public static List<MaterialBean> getAllLocalVideos(Context context,int index,int count) {
+        String sort = MediaStore.Video.Media.DATE_ADDED + " DESC "+ " limit  " + index + "," + count;
         int fileIndex= 0;
         String[] projection = {
                 MediaStore.Video.Media.DATA,
@@ -41,7 +42,7 @@ public class VideoLoadUtil {
                 "video/mkv", "video/mov", "video/mpg"};
         List<MaterialBean> list = new ArrayList<>();
         Cursor cursor = context.getContentResolver().query(MediaStore.Video.Media.EXTERNAL_CONTENT_URI,
-                projection, where, whereArgs, MediaStore.Video.Media.DATE_ADDED + " DESC ");
+                projection, where, whereArgs, sort);
         if (cursor == null) {
             return list;
         }
