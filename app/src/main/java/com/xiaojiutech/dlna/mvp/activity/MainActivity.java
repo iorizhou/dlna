@@ -27,6 +27,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.xiaojiutech.dlna.R;
 import com.xiaojiutech.dlna.mvp.fragment.AudioFragment;
 import com.xiaojiutech.dlna.mvp.fragment.BaseFragment;
+import com.xiaojiutech.dlna.mvp.fragment.FileFragment;
 import com.xiaojiutech.dlna.mvp.fragment.PictureFragment;
 import com.xiaojiutech.dlna.mvp.fragment.VideoFragment;
 import com.xiaojiutech.dlna.utils.AlertDialogUtil;
@@ -55,12 +56,12 @@ public class MainActivity extends BaseFragmentActivity implements EasyPermission
 
     public static final String TAG = "MainActivity";
     private Fragment mCurFragment;
-    private LinearLayout mLayout1,mLayout2,mLayout3;
-    private BaseFragment mVideoFragment,mPictureFragment,mAudioFragment;
+    private LinearLayout mLayout1,mLayout2,mLayout3,mLayout4;
+    private BaseFragment mVideoFragment,mPictureFragment,mAudioFragment,mFileFragment;
     FragmentManager mFragmentManager;
     private long mPressBackTime =0;
-    private TextView mText1,mText2,mText3;
-    private ImageView mImg1,mImg2,mImg3;
+    private TextView mText1,mText2,mText3,mText4;
+    private ImageView mImg1,mImg2,mImg3,mImg4;
     private String mUpgradeFileMd5;
     private ServiceConnection mServiceConnection;
     private WebServerService mWebServerService;
@@ -164,16 +165,20 @@ public class MainActivity extends BaseFragmentActivity implements EasyPermission
         mLayout1 = (LinearLayout)findViewById(R.id.frag1);
         mLayout2 = (LinearLayout)findViewById(R.id.frag2);
         mLayout3 = (LinearLayout)findViewById(R.id.frag3);
+        mLayout4 = (LinearLayout)findViewById(R.id.frag4);
         mText1 = (TextView)findViewById(R.id.text1);
         mText2 = (TextView)findViewById(R.id.text2);
         mText3 = (TextView)findViewById(R.id.text3);
+        mText4 = (TextView)findViewById(R.id.text4);
         mImg1 = (ImageView)findViewById(R.id.img1);
         mImg2 = (ImageView)findViewById(R.id.img2);
         mImg3 = (ImageView)findViewById(R.id.img3);
+        mImg4 = (ImageView)findViewById(R.id.img4);
         mFragmentManager = getSupportFragmentManager();
         mVideoFragment = new VideoFragment();
         mPictureFragment = new PictureFragment();
         mAudioFragment = new AudioFragment();
+        mFileFragment = new FileFragment();
         mLayout1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -193,6 +198,13 @@ public class MainActivity extends BaseFragmentActivity implements EasyPermission
             public void onClick(View view) {
                 FragmentTransaction mTransaction = mFragmentManager.beginTransaction();
                 addOrShowFragment(mTransaction,mAudioFragment,R.id.details,"audio");
+            }
+        });
+        mLayout4.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FragmentTransaction mTransaction = mFragmentManager.beginTransaction();
+                addOrShowFragment(mTransaction,mFileFragment,R.id.details,"file");
             }
         });
         mFragmentManager.beginTransaction().add(R.id.details, mVideoFragment,"video").commitAllowingStateLoss();
@@ -262,24 +274,41 @@ public class MainActivity extends BaseFragmentActivity implements EasyPermission
             mText1.setTextColor(getResources().getColor(R.color.netease_white));
             mText2.setTextColor(getResources().getColor(R.color.netease_gray));
             mText3.setTextColor(getResources().getColor(R.color.netease_gray));
+            mText4.setTextColor(getResources().getColor(R.color.netease_gray));
             mImg1.setVisibility(View.VISIBLE);
             mImg2.setVisibility(View.GONE);
             mImg3.setVisibility(View.GONE);
+            mImg4.setVisibility(View.GONE);
         }else if (mCurFragment.getTag().equals("picture")){
             mText2.setTextColor(getResources().getColor(R.color.netease_white));
             mText1.setTextColor(getResources().getColor(R.color.netease_gray));
             mText3.setTextColor(getResources().getColor(R.color.netease_gray));
+            mText4.setTextColor(getResources().getColor(R.color.netease_gray));
             mImg2.setVisibility(View.VISIBLE);
             mImg1.setVisibility(View.GONE);
             mImg3.setVisibility(View.GONE);
+            mImg4.setVisibility(View.GONE);
         }else if (mCurFragment.getTag().equals("audio")){
             mText3.setTextColor(getResources().getColor(R.color.netease_white));
             mText1.setTextColor(getResources().getColor(R.color.netease_gray));
             mText2.setTextColor(getResources().getColor(R.color.netease_gray));
+            mText4.setTextColor(getResources().getColor(R.color.netease_gray));
             mImg3.setVisibility(View.VISIBLE);
             mImg1.setVisibility(View.GONE);
             mImg2.setVisibility(View.GONE);
+            mImg4.setVisibility(View.GONE);
+        }else if (mCurFragment.getTag().equals("file")){
+            mText4.setTextColor(getResources().getColor(R.color.netease_white));
+            mText1.setTextColor(getResources().getColor(R.color.netease_gray));
+            mText2.setTextColor(getResources().getColor(R.color.netease_gray));
+            mText3.setTextColor(getResources().getColor(R.color.netease_gray));
+            mImg4.setVisibility(View.VISIBLE);
+            mImg1.setVisibility(View.GONE);
+            mImg2.setVisibility(View.GONE);
+            mImg3.setVisibility(View.GONE);
         }
+
+
     }
 
     @Override
@@ -368,13 +397,18 @@ public class MainActivity extends BaseFragmentActivity implements EasyPermission
         switch (keyCode){
             case KeyEvent.KEYCODE_BACK:
                 long secondTime=System.currentTimeMillis();
-                if(secondTime- mPressBackTime >2000){
-                    Toast.makeText(MainActivity.this,getString(R.string.double_click_exit_app),Toast.LENGTH_SHORT).show();
-                    mPressBackTime =secondTime;
+                if (mCurFragment!=null && mCurFragment instanceof FileFragment && ((FileFragment)mCurFragment).isInterceptBack()){
+                    ((FileFragment)mCurFragment).onBackPressed();
                     return true;
-                }else{
-                    finish();
-                    Process.killProcess(Process.myPid());
+                }else {
+                    if(secondTime- mPressBackTime >2000){
+                        Toast.makeText(MainActivity.this,getString(R.string.double_click_exit_app),Toast.LENGTH_SHORT).show();
+                        mPressBackTime =secondTime;
+                        return true;
+                    }else{
+                        finish();
+                        Process.killProcess(Process.myPid());
+                    }
                 }
                 break;
         }

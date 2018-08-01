@@ -116,6 +116,39 @@
                 android:textColor="@color/netease_gray"
                 />
         </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:id="@+id/frag4"
+            android:gravity="center"
+            android:paddingTop="4dp"
+            android:paddingBottom="4dp"
+            android:layout_gravity="center_vertical"
+            android:orientation="vertical"
+            >
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:id="@+id/img4"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:src="@color/netease_white"
+                android:visibility="gone"
+                />
+            <TextView
+                android:id="@+id/text4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/sdcard"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:textSize="18sp"
+                android:layout_marginTop="10dp"
+                android:textColor="@color/netease_gray"
+                />
+        </LinearLayout>
     </LinearLayout>
 
 </RelativeLayout>

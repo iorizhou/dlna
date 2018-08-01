@@ -67,6 +67,10 @@ public class BaseFragment extends Fragment {
         mLoadListener = listener;
     }
 
+    public void onBackPressed(){
+        Log.i(TAG,"onBackPressed");
+    }
+
     public void play(MaterialBean bean){
         setDevice();
         this.mMediaBean = bean;
@@ -80,7 +84,7 @@ public class BaseFragment extends Fragment {
 
         if (mController == null || mDevice == null) {
             // usually can't reach here.
-            Toast.makeText(getActivity(), getString(R.string.play_error_tip),
+            Toast.makeText(getActivity(), getString(R.string.dlna_nodeivce),
                     Toast.LENGTH_SHORT).show();
             Log.d(TAG, "Controller or Device is null, finish this activity");
             return;

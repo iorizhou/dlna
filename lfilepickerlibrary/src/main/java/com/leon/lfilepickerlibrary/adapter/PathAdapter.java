@@ -51,6 +51,26 @@ public class PathAdapter extends RecyclerView.Adapter<PathAdapter.PathViewHolder
         this.mFileSize = mFileSize;
         mCheckedFlags = new boolean[mListData.size()];
     }
+    public boolean isAllSelected(){
+        boolean result = true;
+        for (Boolean b : mCheckedFlags){
+            if (!b){
+                result = false;
+                break;
+            }
+        }
+        return result;
+    }
+    public void updateSelectStatus(List<String> selectedFileList){
+        for (int i = 0; i < mListData.size(); i++) {
+            if (selectedFileList.contains(mListData.get(i).getAbsolutePath())){
+                mCheckedFlags[i] = true;
+            }else {
+                mCheckedFlags[i] = false;
+            }
+        }
+        notifyDataSetChanged();
+    }
 
     @Override
     public PathViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {

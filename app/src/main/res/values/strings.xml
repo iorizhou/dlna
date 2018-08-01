@@ -4,6 +4,7 @@
     <string name="video">视频</string>
     <string name="picture">照片</string>
     <string name="audio">音频</string>
+    <string name="sdcard">SD卡</string>
     <string name="upgrade_file_error">抱歉,升级文件被损毁.升级失败,请稍候再试.</string>
     <string name="new_version_tip">APP版本升级</string>
     <string name="confirm">确定</string>

@@ -74,21 +74,21 @@ public class FileUtils {
         Iterator iterator = list.iterator();
         while (iterator.hasNext()) {
             File f = (File) iterator.next();
-            if (f.isFile()) {
-                //获取当前文件大小
-                long size = FileUtils.getFileLength(f);
-                if (isGreater) {
-                    //当前想要留下大于指定大小的文件，所以过滤掉小于指定大小的文件
-                    if (size < targetSize) {
-                        iterator.remove();
-                    }
-                } else {
-                    //当前想要留下小于指定大小的文件，所以过滤掉大于指定大小的文件
-                    if (size > targetSize) {
-                        iterator.remove();
-                    }
-                }
-            }
+//            if (f.isFile()) {
+//                //获取当前文件大小
+//                long size = FileUtils.getFileLength(f);
+//                if (isGreater) {
+//                    //当前想要留下大于指定大小的文件，所以过滤掉小于指定大小的文件
+//                    if (size < targetSize) {
+////                        iterator.remove();
+//                    }
+//                } else {
+//                    //当前想要留下小于指定大小的文件，所以过滤掉大于指定大小的文件
+//                    if (size > targetSize) {
+////                        iterator.remove();
+//                    }
+//                }
+//            }
         }
         return list;
     }
